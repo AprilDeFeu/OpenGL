@@ -1,0 +1,4 @@
+// HEADERS
+
+// FUNCTIONS
+int myGraphics();
