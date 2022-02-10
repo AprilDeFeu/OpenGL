@@ -1,4 +1,2 @@
-// HEADERS
-
 // FUNCTIONS
 int myGraphics();

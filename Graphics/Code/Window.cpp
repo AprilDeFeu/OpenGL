@@ -3,13 +3,22 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
+#include "Window.hpp"
+#include "Shaders.hpp"
 
-// CONSTANTS
-// Window dimensions
-const GLint WIDTH = 800, HEIGHT = 600;
+// CLASS CONSTRUCTOR
+BasicWindow::BasicWindow(GLint width, GLint height) {
+    set_Window_Size(width, height);
+}
 
+// FUNCTIONS
 
-int test_Window() {
+void BasicWindow::set_Window_Size(GLint width, GLint height) {
+    WIDTH = width; 
+    HEIGHT = height;
+}
+
+int BasicWindow::display() {
     // INITIALIZE GLFW
 
     if (!glfwInit()) { 
@@ -56,23 +65,33 @@ int test_Window() {
     // SETUP VIEWPORT SIZE
     glViewport(0,0, buffer_Width, buffer_Height);
 
+    // SHADERS SETUP
+    // ('tg' is short for triangle)
+    BasicShader tg;
+    tg.display_Triangle();
+    tg.compile_Shader();
+
+    
+
     // QUIT WHEN WINDOW CLOSES
     while(!glfwWindowShouldClose(mainWindow)) {
         // Get & Handle user input events
         glfwPollEvents();
 
         // Clear window
-        glClearColor(1.0f, 0.0f, 0.0f, 0.65f);
+        glClearColor(0.99f, 0.98f, 0.89f, 0.8);
         glClear(GL_COLOR_BUFFER_BIT);
-        // Switch window buffer to display red.
+        // Add triangle 
+        glUseProgram(tg.shader);
+        glBindVertexArray(tg.VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(0);
+
+        glUseProgram(0);
+        // Switch window buffer
         glfwSwapBuffers(mainWindow);
 
     }
 
     return 0;
-}
-
-// FUNCTIONS
-int myGraphics() {
-    return test_Window();
 }
